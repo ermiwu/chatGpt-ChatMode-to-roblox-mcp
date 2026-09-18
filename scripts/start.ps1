@@ -28,7 +28,8 @@ try {
 
     $tunnelLog = Join-Path $logsDir 'cloudflared.log'
     Set-Content -LiteralPath $tunnelLog -Value '' -Encoding UTF8
-    $tunnel = Start-Process -FilePath $cloudflared -ArgumentList @('tunnel', '--url', 'http://127.0.0.1:58742', '--no-autoupdate', '--logfile', $tunnelLog) -WindowStyle Hidden -PassThru
+    $quotedTunnelLog = '"' + $tunnelLog + '"'
+    $tunnel = Start-Process -FilePath $cloudflared -ArgumentList @('tunnel', '--url', 'http://127.0.0.1:58742', '--no-autoupdate', '--logfile', $quotedTunnelLog) -WindowStyle Hidden -PassThru
 
     $publicBaseUrl = $null
     for ($attempt = 0; $attempt -lt 60 -and -not $publicBaseUrl; $attempt++) {

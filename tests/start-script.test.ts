@@ -16,6 +16,7 @@ describe('Windows launcher', () => {
     expect(library).toContain('https://');
     expect(library).toContain('trycloudflare.com');
     expect(library).toContain('.env.local');
+    expect(library).toContain('UTF8Encoding($false)');
     expect(library).not.toMatch(/Set-Content[^\r\n]+\.env(?:['"]|\s)/);
   });
 });

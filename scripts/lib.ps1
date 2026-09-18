@@ -35,6 +35,7 @@ function Write-LocalEnvironment {
         "MCP_TOKEN_SECRET=$TokenSecret"
         "ALLOWED_ORIGINS=$PublicBaseUrl"
     )
-    Set-Content -LiteralPath $target -Value $lines -Encoding UTF8
+    $utf8WithoutBom = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllLines($target, $lines, $utf8WithoutBom)
     return $target
 }
