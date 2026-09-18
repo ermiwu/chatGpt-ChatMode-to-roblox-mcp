@@ -111,6 +111,26 @@ Press `Ctrl+C` in the launcher window to stop both the local gateway and Cloudfl
 
 `.env.local`, `.tools/`, and `logs/` are ignored by Git. If you no longer need them, move those specific files or folders to the Recycle Bin. There is no Studio extension to uninstall.
 
+## Stable Tailscale Funnel URL and Windows autostart
+
+Without a custom domain, Tailscale Funnel can provide a stable public `*.ts.net` HTTPS hostname. Configure the Funnel to proxy to `http://127.0.0.1:58742`, then set both `PUBLIC_BASE_URL` and `ALLOWED_ORIGINS` in `.env.local` to that fixed HTTPS origin.
+
+Install the current-user logon task:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-autostart.ps1
+```
+
+The task invokes `scripts/start-fixed.ps1`. It validates Tailscale and the Funnel route, builds the project, runs diagnostics, starts the gateway, and performs bounded restarts after crashes. Logs are written to `logs/fixed-gateway.log`.
+
+Remove only the project task with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\uninstall-autostart.ps1
+```
+
+Configure the ChatGPT App once with the stable URL ending in `/mcp`. A gateway restart can invalidate in-memory OAuth client or refresh state; if authorization fails, approve OAuth again in the existing App instead of recreating it. Roblox Studio must still be open with the target Place and its built-in MCP server enabled.
+
 ## 10. Troubleshooting
 
 ### Built-in Roblox MCP not found

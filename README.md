@@ -10,7 +10,7 @@
 ChatGPT 网页版
   │ HTTPS + OAuth 2.1/PKCE
   ▼
-Cloudflare Tunnel ──► 本机网关 127.0.0.1:58742
+Tailscale Funnel ──► 本机网关 127.0.0.1:58742
                          │ stdio
                          ▼
                     Roblox 自带 MCP ──► Roblox Studio
@@ -44,6 +44,24 @@ Cloudflare Tunnel ──► 本机网关 127.0.0.1:58742
 7. 第一次读取建议使用 `get_studio_state` 或 `search_game_tree`。第一次写入建议做一个可立即撤销的小改动，并先检查参数。
 
 Quick Tunnel 每次启动的公网地址都会变化；重启后需要更新 App 的 MCP URL。完整步骤、长期固定地址和故障排查见 [中文教程](docs/教程.md)；English instructions are available in the [English Tutorial](docs/Tutorial.md).
+
+## 固定地址与登录自动启动
+
+已有 Tailscale Funnel 的电脑可以永久使用同一个 `*.ts.net` 固定地址。配置好 `.env.local` 后运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-autostart.ps1
+```
+
+计划任务会在当前用户登录时调用 `scripts/start-fixed.ps1`，验证 Funnel、构建并启动网关。ChatGPT App 永久填写固定地址末尾的 `/mcp`，不需要重新创建。网关重启后旧的 OAuth 客户端或刷新令牌可能失效，此时只需在原 App 中重新批准，不要删除 App。
+
+移除自动启动但保留项目、Tailscale 和日志：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\uninstall-autostart.ps1
+```
+
+Roblox Studio 和目标项目仍必须打开，并保持官方 MCP 开关启用。`scripts/start.ps1` 继续作为 Cloudflare Quick Tunnel 临时测试入口。
 
 ## 常用命令
 
