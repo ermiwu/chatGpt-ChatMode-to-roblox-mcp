@@ -11,6 +11,7 @@ describe('fixed Tailscale launcher', () => {
     expect(script).toContain('npm start');
     expect(script).toContain('logs');
     expect(script).toContain('Start-Sleep -Seconds 5');
+    expect(script).toContain('UTF8Encoding');
     expect(script).not.toContain('trycloudflare.com');
     expect(script).not.toMatch(/MCP_(?:AUTH_PASSWORD|TOKEN_SECRET)\s*=\s*['"][^$]/);
   });

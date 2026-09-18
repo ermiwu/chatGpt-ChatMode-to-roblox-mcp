@@ -11,12 +11,14 @@ describe('Windows autostart scripts', () => {
     expect(script).toContain('MultipleInstances IgnoreNew');
     expect(script).toContain('RestartCount 3');
     expect(script).toContain('Start-ScheduledTask');
+    expect(script).toContain('-Verb RunAs');
   });
 
   test('removes only the exact project task', async () => {
     const script = await readFile('scripts/uninstall-autostart.ps1', 'utf8');
     expect(script).toContain("$taskName = 'WebToRobloxMcp'");
     expect(script).toContain('Unregister-ScheduledTask -TaskName $taskName');
+    expect(script).toContain('-Verb RunAs');
     expect(script).not.toMatch(/Remove-Item|del\s|rm\s/i);
   });
 });
