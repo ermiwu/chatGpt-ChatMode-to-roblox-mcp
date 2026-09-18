@@ -11,6 +11,7 @@ describe('Windows autostart scripts', () => {
     expect(script).toContain('MultipleInstances IgnoreNew');
     expect(script).toContain('RestartCount 3');
     expect(script).toContain('Start-ScheduledTask');
+    expect(script).toContain('Stop-ScheduledTask');
     expect(script).toContain('-Verb RunAs');
   });
 
