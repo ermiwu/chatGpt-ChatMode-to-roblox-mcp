@@ -39,3 +39,32 @@ function Write-LocalEnvironment {
     [IO.File]::WriteAllLines($target, $lines, $utf8WithoutBom)
     return $target
 }
+
+# Parse a dotenv file without evaluating its contents as PowerShell code.
+function Read-LocalEnvironment {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    $values = @{}
+    foreach ($line in Get-Content -LiteralPath $Path -Encoding UTF8) {
+        if (-not $line -or $line.TrimStart().StartsWith('#')) { continue }
+        $pair = $line -split '=', 2
+        if ($pair.Count -eq 2) { $values[$pair[0].Trim()] = $pair[1] }
+    }
+    return $values
+}
+
+# Validate that local settings and the active Funnel describe one fixed, loopback-only gateway.
+function Test-FixedGatewayEnvironment {
+    param(
+        [Parameter(Mandatory = $true)][hashtable]$Values,
+        [Parameter(Mandatory = $true)][string]$TailscaleState,
+        [Parameter(Mandatory = $true)][string]$FunnelStatus
+    )
+    $required = @('PUBLIC_BASE_URL', 'MCP_AUTH_PASSWORD', 'MCP_TOKEN_SECRET', 'ALLOWED_ORIGINS')
+    foreach ($name in $required) { if (-not $Values[$name]) { throw "$name is missing from .env.local" } }
+    $publicUrl = [Uri]$Values.PUBLIC_BASE_URL
+    if ($publicUrl.Scheme -ne 'https') { throw 'PUBLIC_BASE_URL must use HTTPS.' }
+    if ($Values.ALLOWED_ORIGINS.TrimEnd('/') -ne $Values.PUBLIC_BASE_URL.TrimEnd('/')) { throw 'ALLOWED_ORIGINS must match PUBLIC_BASE_URL.' }
+    if (($Values.REMOTE_HOST -and $Values.REMOTE_HOST -ne '127.0.0.1') -or ($Values.REMOTE_PORT -and $Values.REMOTE_PORT -ne '58742')) { throw 'The fixed gateway must use 127.0.0.1:58742.' }
+    if ($TailscaleState -ne 'Running') { throw 'Tailscale is not connected.' }
+    if ($FunnelStatus -notmatch [regex]::Escape($publicUrl.Host) -or $FunnelStatus -notmatch '127[.]0[.]0[.]1:58742') { throw 'Tailscale Funnel does not match the fixed gateway URL and port.' }
+}
