@@ -6,3 +6,5 @@ export type { RobloxMcpClientOptions, RobloxMcpStatus } from './roblox-client.js
 export { normalizeTools } from './tool-catalog.js';
 export { OAuthStore } from './oauth-store.js';
 export { createOAuthRouter } from './oauth-routes.js';
+export { createRemoteServer, listenRemoteServer } from './remote-server.js';
+export type { GatewayStatus, RobloxToolProvider, RemoteServer, ListeningRemoteServer } from './remote-server.js';
