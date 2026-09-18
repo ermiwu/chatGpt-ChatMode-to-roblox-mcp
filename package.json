@@ -7,8 +7,8 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-    "start": "node --env-file=.env dist/index.js",
-    "doctor": "node --env-file-if-exists=.env dist/doctor.js"
+    "start": "node --env-file=.env.local dist/index.js",
+    "doctor": "node --env-file-if-exists=.env.local dist/doctor.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",

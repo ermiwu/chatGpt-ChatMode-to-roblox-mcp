@@ -1,5 +1,8 @@
 node_modules/
 dist/
+.env.local
+.tools/
+logs/
 coverage/
 .env.local
 .tools/
