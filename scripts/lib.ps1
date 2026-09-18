@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-# 从 cloudflared 日志中提取唯一的 HTTPS Quick Tunnel 地址。
+# Extract the HTTPS Quick Tunnel URL from cloudflared logs.
 function Get-TryCloudflareUrl {
     param([Parameter(Mandatory = $true)][string]$LogPath)
     if (-not (Test-Path -LiteralPath $LogPath)) { return $null }
@@ -10,7 +10,7 @@ function Get-TryCloudflareUrl {
     return $null
 }
 
-# 生成适合密码和令牌签名的加密随机字符串。
+# Generate a cryptographically secure password or signing secret.
 function New-SecureValue {
     param([int]$Bytes = 32)
     $buffer = New-Object byte[] $Bytes
@@ -18,7 +18,7 @@ function New-SecureValue {
     return [Convert]::ToBase64String($buffer).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 }
 
-# 只向被 Git 忽略的 .env.local 写入本次运行配置。
+# Write runtime settings only to the Git-ignored .env.local file.
 function Write-LocalEnvironment {
     param(
         [Parameter(Mandatory = $true)][string]$ProjectRoot,
