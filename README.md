@@ -47,7 +47,20 @@ Quick Tunnel 每次启动的公网地址都会变化；重启后需要更新 App
 
 ## 固定地址与登录自动启动
 
-已有 Tailscale Funnel 的电脑可以永久使用同一个 `*.ts.net` 固定地址。配置好 `.env.local` 后运行：
+推荐使用 Tailscale Funnel，**不需要购买域名**。每位用户登录自己的 Tailscale 账号后，都会获得自己的固定地址，例如：
+
+```text
+https://your-computer.your-tailnet.ts.net/mcp
+```
+
+安装并登录 Tailscale 后，把本地端口发布到自己的固定地址：
+
+```powershell
+tailscale funnel --bg --yes http://127.0.0.1:58742
+tailscale funnel status
+```
+
+把输出的 HTTPS 根地址分别写入 `.env.local` 的 `PUBLIC_BASE_URL` 和 `ALLOWED_ORIGINS`，再安装自动任务：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\install-autostart.ps1
@@ -62,6 +75,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\uninstall-autostart.ps1
 ```
 
 Roblox Studio 和目标项目仍必须打开，并保持官方 MCP 开关启用。`scripts/start.ps1` 继续作为 Cloudflare Quick Tunnel 临时测试入口。
+
+已有 Cloudflare 域名的用户也可以使用 Named Tunnel，但它只是高级可选方案，不是使用本项目的前提。
 
 ## 常用命令
 

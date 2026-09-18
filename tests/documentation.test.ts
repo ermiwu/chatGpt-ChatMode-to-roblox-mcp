@@ -12,6 +12,9 @@ describe('Chinese documentation', () => {
     for (const phrase of ['Tailscale Funnel', 'start-fixed.ps1', 'install-autostart.ps1', 'uninstall-autostart.ps1', '固定地址', '重新批准']) {
       expect(text).toContain(phrase);
     }
+    for (const phrase of ['不需要购买域名', '每位用户', 'tailscale funnel --bg --yes', '自己的固定地址']) {
+      expect(text).toContain(phrase);
+    }
     expect(text).not.toContain('安装第三方 Studio 插件');
     expect(text).not.toContain('58741');
   });

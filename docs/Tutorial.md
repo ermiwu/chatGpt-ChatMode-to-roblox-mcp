@@ -113,7 +113,18 @@ Press `Ctrl+C` in the launcher window to stop both the local gateway and Cloudfl
 
 ## Stable Tailscale Funnel URL and Windows autostart
 
-Without a custom domain, Tailscale Funnel can provide a stable public `*.ts.net` HTTPS hostname. Configure the Funnel to proxy to `http://127.0.0.1:58742`, then set both `PUBLIC_BASE_URL` and `ALLOWED_ORIGINS` in `.env.local` to that fixed HTTPS origin.
+You do not need to buy a domain. Every user signs in to their own Tailscale account and receives their own stable public `*.ts.net` HTTPS hostname; never copy another user's hostname.
+
+Install the official Tailscale Windows client, sign in, and approve the current computer. Then run:
+
+```powershell
+tailscale funnel --bg --yes http://127.0.0.1:58742
+tailscale funnel status
+```
+
+The first command may print an approval URL. Open it, enable Funnel, and run the command again. The output will show your own fixed address, such as `https://your-computer.your-tailnet.ts.net`.
+
+Copy `.env.example` to `.env.local`. Set `PUBLIC_BASE_URL` and `ALLOWED_ORIGINS` to your fixed HTTPS origin, choose a random OAuth approval password, and choose a separate signing secret of at least 32 characters. Keep the gateway on `127.0.0.1:58742` and never commit `.env.local`.
 
 Install the current-user logon task:
 
